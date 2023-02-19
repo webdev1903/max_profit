@@ -5,7 +5,7 @@ const pubEarning = 1000;
 const commercialParkBuildingTime = 10;
 const commercialParkEarning = 3000;
 
-const n = 13; //change the value of input here
+const n = 29; //change the value of input here
 let res = [];
 let obj = { T: 0, P: 0, C: 0 };
 
@@ -17,20 +17,25 @@ function maxProfit(n, sum, obj) {
   if (n == 0) {
     return;
   }
-  maxProfit(
-    n - theatreBuildingTime,
-    sum + (n - theatreBuildingTime) * theatreEarning,
-    { ...obj, T: obj.T + 1 }
-  );
-  maxProfit(n - pubBuildingTime, sum + (n - pubBuildingTime) * pubEarning, {
+  maxProfit(n - theatreBuildingTime, sum, { ...obj, T: obj.T + 1 }) ||
+    maxProfit(0, sum + (n - theatreBuildingTime) * theatreEarning, {
+      ...obj,
+      T: obj.T + 1,
+    });
+  maxProfit(n - pubBuildingTime, sum, {
     ...obj,
     P: obj.P + 1,
-  });
-  maxProfit(
-    n - commercialParkBuildingTime,
-    sum + (n - commercialParkBuildingTime) * commercialParkEarning,
-    { ...obj, C: obj.C + 1 }
-  );
+  }) ||
+    maxProfit(0, sum + (n - pubBuildingTime) * pubEarning, {
+      ...obj,
+      P: obj.P + 1,
+    });
+  maxProfit(n - commercialParkBuildingTime, sum, { ...obj, C: obj.C + 1 }) ||
+    maxProfit(
+      0,
+      sum + (n - commercialParkBuildingTime) * commercialParkEarning,
+      { ...obj, C: obj.C + 1 }
+    );
 }
 
 maxProfit(n, 0, obj);
